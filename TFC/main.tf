@@ -43,9 +43,8 @@ locals {
         account = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[0] : ""
 
         # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
-        branch = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].vcs_repo[0].branch != "" ? data.tfe_workspace.all[name].vcs_repo[0].branch : var.vcs_default_branch : var.vcs_default_branch
+        branch = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].vcs_repo[0].branch != "" ? data.tfe_workspace.all[name].vcs_repo[0].branch : "" : ""
 
-        namespace    = var.vcs_namespace
         project_root = data.tfe_workspace.all[name].working_directory
 
         # The "identifier" argument contains the account/organization and the repository names, separated by a slash

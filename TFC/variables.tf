@@ -21,18 +21,6 @@ variable "tfc_workspace_include_tags" {
   type        = list(string)
 }
 
-variable "vcs_default_branch" {
-  default     = "main"
-  description = "Name of the repositories' default branch"
-  type        = string
-}
-
-variable "vcs_namespace" {
-  default     = ""
-  description = "The name of the entity containing the repository. The value should be empty for GitHub.com, the user/organization for GitHub (custom application), the project for Bitbucket, and the namespace for Gitlab."
-  type        = string
-}
-
 variable "tfc_token" {
   description = "TFC/TFE token"
   type        = string
