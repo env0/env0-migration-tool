@@ -32,3 +32,8 @@ variable "vcs_namespace" {
   description = "The name of the entity containing the repository. The value should be empty for GitHub.com, the user/organization for GitHub (custom application), the project for Bitbucket, and the namespace for Gitlab."
   type        = string
 }
+
+variable "tfc_token" {
+  description = "TFC/TFE token"
+  type        = string
+}
