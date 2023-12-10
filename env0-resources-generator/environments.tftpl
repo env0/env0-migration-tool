@@ -1,14 +1,20 @@
-%{ for workspace in [for ws in workspaces: ws if ws.vcs.repository != ""] ~}
+%{ for workspace in workspaces ~}
 resource "env0_environment" "${workspace.name}" {
     name = "${workspace.name}"
     project_id = resource.env0_project.${replace(workspace.project_name," ","_")}.id
     workspace = "${workspace.name}"
+    approve_plan_automatically = false
     without_template_settings {
         repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
-        type = "terraform"
+        type = "${workspace.type}"
+        %{ if workspace.type == "terraform" ~}
         terraform_version = "${workspace.terraform_version}"
+        %{ endif ~}
+        %{ if workspace.type == "opentofu" ~}
+        opentofu_version = "${workspace.opentofu_version}"
+        %{ endif ~}
     }
     %{ for env_var in workspace.env_vars ~}
 

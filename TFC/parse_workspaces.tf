@@ -1,7 +1,7 @@
 locals {
   workspaces_ids  = [for _, id in data.tfe_workspace_ids.all.ids : id]
   workspace_names = [for name, _ in data.tfe_workspace_ids.all.ids : name]
-  all_workspaces      = [
+  all_workspaces  = [
     for name, id in data.tfe_workspace_ids.all.ids : {
       env_vars = [
         for i, env_var in data.tfe_variables.all[id].variables : {
@@ -15,7 +15,7 @@ locals {
       labels            = data.tfe_workspace.all[name].tag_names
       name              = data.tfe_workspace.all[name].name
       description       = data.tfe_workspace.all[name].description
-      terraform_version = data.tfe_workspace.all[name].terraform_version
+      terraform_version = trimprefix(data.tfe_workspace.all[name].terraform_version, "~>")
       project_name      = local.project_ids_to_names[data.tfe_workspace.all[name].project_id]
       vcs               = {
         # The "identifier" argument contains the account/organization and the repository names, separated by a slash
@@ -34,5 +34,28 @@ locals {
 
   workspaces_with_vcs_repositories = [
     for workspace in local.all_workspaces : workspace if workspace.vcs.repository != ""
+  ]
+
+  opentofu_type_and_version = { type = "opentofu", version = "1.6.0-beta" }
+  split_versions            = {
+    for workspace in local.workspaces_with_vcs_repositories : workspace.name =>
+    split(".", workspace.terraform_version)
+  }
+
+  environment_type = {
+    for workspace in local.workspaces_with_vcs_repositories :
+    workspace.name =>
+    parseint(local.split_versions[workspace.name][0], 10) > 1 ? local.opentofu_type_and_version :
+    parseint(local.split_versions[workspace.name][0], 10) == 1 && parseint(local.split_versions[workspace.name][1], 10) >= 6 ? local.opentofu_type_and_version :
+    { type = "terraform" }
+  }
+
+  final_workspace_list = [
+    for workspace in local.workspaces_with_vcs_repositories :
+    merge(workspace, {
+      type              = local.environment_type[workspace.name].type
+      terraform_version = local.environment_type[workspace.name].type == "terraform" ? workspace.terraform_version : null
+      opentofu_version  = local.environment_type[workspace.name].type == "opentofu" ?"1.6.0-beta" : null
+    })
   ]
 }
