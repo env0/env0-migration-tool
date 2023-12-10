@@ -1,0 +1,6 @@
+%{ for project in toset([for workspace in workspaces: workspace.project_name]) ~}
+resource "env0_project" "${replace(project," ","_")}" {
+    name = "${project}"
+}
+
+%{ endfor ~}
