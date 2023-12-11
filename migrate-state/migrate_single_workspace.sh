@@ -76,7 +76,7 @@ echo "Initializing Terraform... for Env0"
 
 # push TF state
 terraform init
-terraform state push -force tfc.tfstate
+terraform state push -ignore-remote-version -force tfc.tfstate
 
 # cleanup
 cd ..
