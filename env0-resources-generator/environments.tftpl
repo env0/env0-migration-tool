@@ -4,6 +4,7 @@ resource "env0_environment" "${workspace.name}" {
     project_id = resource.env0_project.${replace(workspace.project_name," ","_")}.id
     workspace = "${workspace.name}"
     approve_plan_automatically = false
+    is_remote_backend = true
     without_template_settings {
         repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
         path = "${workspace.vcs.project_root}"
