@@ -1,5 +1,5 @@
 resource "local_file" "main" {
-  content  = templatefile("main.tftpl", { })
+  content  = templatefile("terraform_templates/main.tftpl", { })
   filename = "${path.module}/out/main.tf"
 
   provisioner "local-exec" {
@@ -8,7 +8,7 @@ resource "local_file" "main" {
 }
 
 resource "local_file" "environments" {
-  content  = templatefile("environments.tftpl", { workspaces = var.workspaces })
+  content  = templatefile("terraform_templates/environments.tftpl", { workspaces = var.workspaces })
   filename = "${path.module}/out/environments.tf"
 
   provisioner "local-exec" {
@@ -17,7 +17,7 @@ resource "local_file" "environments" {
 }
 
 resource "local_file" "projects" {
-  content  = templatefile("projects.tftpl", { workspaces = var.workspaces })
+  content  = templatefile("terraform_templates/projects.tftpl", { workspaces = var.workspaces })
   filename = "${path.module}/out/projects.tf"
 
   provisioner "local-exec" {
