@@ -72,7 +72,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "Initializing Terraform... for Env0"
+echo "Initializing Terraform with env0 backend and pushing state"
 
 # push TF state
 terraform init
