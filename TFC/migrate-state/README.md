@@ -11,19 +11,16 @@ This action will migrate state from one TFC workspace to an env0 environment.
 
 ## Inputs
 
-- tfc_org_name: The name of the TFC organization
-- env0_org_id: The ID of the env0 organization
-- workspaces: A list of workspaces to migrate. You should use the exported workspaces from the `TFC/out` folder
-- env0_hostname: (override for development purposes only) url for env0's remote backend
+- `ENV0_ORG_ID`: env0 organization id
+- `TFC_ORG_NAME`: organization name in TFC
 
 ## Usage
 
-1. run `terraform init` in the `migrate-state` folder
-2. run `terraform apply` in the `migrate-state` folder
+1. run `./migrate_workspaces.sh`
 
 ## How does it work?
 
-For each workspace, the action will run the `migrate_single_workspace.sh` script. This script will:
+For each workspace, the script will run the `migrate_single_workspace.sh` script, which in turn will:
 - create a new directory for the workspace
 - download the state file from TFC
 - upload the state file to env0
@@ -31,4 +28,6 @@ For each workspace, the action will run the `migrate_single_workspace.sh` script
 
 ## Note
 
-- only workspaces with Terraform version <1.6.0 are supported
+- only workspaces with Terraform version <1.6.0 are supported. the remote version of the workspace and environment is irrelevant, we use `ignore_remote_version` when pushing the state
+- only Terraform <1.6.0 will manage to run the script
+- the script overrides existing workspaces in env0!

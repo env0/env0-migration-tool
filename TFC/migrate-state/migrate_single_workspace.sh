@@ -39,7 +39,7 @@ env0_destination_file="env0.tf"
 
 # Create a copy of the source file with replacements
 sed -e "s|!!!ENV0_ORG_ID!!!|${ENV0_ORG_ID}|g" \
-  -e "s|!!!ENV0_HOSTNAME!!!|${ENV0_HOSTNAME}|g" \
+  -e "s|!!!ENV0_HOSTNAME!!!|${ENV0_HOSTNAME:="backend.api.env0.com"}|g" \
   -e "s|!!!WS_NAME!!!|$1|g" \
   "$env0_source_file" >"$env0_destination_file"
 

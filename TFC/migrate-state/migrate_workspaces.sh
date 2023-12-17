@@ -2,7 +2,7 @@
 set -e
 
 # Define the required environment variables
-required_env_vars=("ENV0_ORG_ID" "TFC_ORG_NAME" "ENV0_HOSTNAME" )
+required_env_vars=("ENV0_ORG_ID" "TFC_ORG_NAME")
 
 # Function to check if an environment variable is set
 check_env_var() {
