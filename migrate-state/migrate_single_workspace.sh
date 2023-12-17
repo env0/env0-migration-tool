@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "Initializing Terraform... for TFC"
+echo "Initializing Terraform with TFC backend and pulling state"
 
 # pull TF state
 terraform init
