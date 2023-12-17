@@ -1,0 +1,10 @@
+terraform {
+  backend "remote" {
+    hostname = "!!!ENV0_HOSTNAME!!!"
+    organization = "!!!ENV0_ORG_ID!!!"
+
+    workspaces {
+      name = "!!!WS_NAME!!!"
+    }
+  }
+}
