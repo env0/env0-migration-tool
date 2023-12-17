@@ -22,18 +22,10 @@ terraform {
   }
 }
 
-provider "tfe" {
-  # Configuration options
-}
+provider "tfe" {}
 
-provider "http" {
-  # Configuration options
-}
+provider "http" {}
 
-provider "null" {
-  # Configuration options
-}
+provider "null" {}
 
-provider "local" {
-  # Configuration options
-}
+provider "local" {}
