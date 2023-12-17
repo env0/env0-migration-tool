@@ -21,3 +21,19 @@ terraform {
     }
   }
 }
+
+provider "tfe" {
+  # Configuration options
+}
+
+provider "http" {
+  # Configuration options
+}
+
+provider "null" {
+  # Configuration options
+}
+
+provider "local" {
+  # Configuration options
+}
