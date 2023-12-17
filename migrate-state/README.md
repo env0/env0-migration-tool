@@ -1,6 +1,6 @@
 # Migrate State into env0
 
-This action will migrate state from one TFC workspace an env0 environment.
+This action will migrate state from one TFC workspace to an env0 environment.
 
 ## Pre-requisites
 
