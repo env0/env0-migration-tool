@@ -53,3 +53,8 @@ Note: you'll need to have the env0 credentials set as environment variables and 
 the script is supported only for Terraform version <1.6.0
 
 See `migrate-state/README.md` for more details about this phase
+
+## Supported workspaces for migration
+
+Currently the tool will only migrate VCS integrated workspaces, and the migration will be successful only for Github repositories.
+Workspaces that use Terraform versions >=1.6.0, will be using OpenTofu in env0.
