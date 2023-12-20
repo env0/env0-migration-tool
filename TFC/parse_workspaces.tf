@@ -8,7 +8,7 @@ locals {
           hcl       = env_var.hcl
           name      = env_var.name
           sensitive = env_var.sensitive
-          value     = env_var.sensitive ? " " : env_var.value
+          value     = env_var.sensitive ? "secret_value_from_terraform_cloud" : env_var.value
           type      = env_var.category == "terraform" ? "terraform" : "environment"
         }
       ]
