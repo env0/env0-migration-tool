@@ -40,7 +40,7 @@ Note: you'll need to have the env0 credentials set as environment variables. See
 
 
 4. import the workspaces to env0:
-go to the `TFC/migrate` folder and run:
+go to the `TFC/migrate-state` folder and run:
 ```bash
 ./migrate_workspaces.sh
 ```
