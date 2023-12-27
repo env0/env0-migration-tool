@@ -23,7 +23,7 @@ This guide can serve as a reference to troubleshoot and address any issues encou
         ```
         brew install tfenv
         ```
-     2. Use version `1.5.3`
+     2. Use version any version below `1.6.0` (e.g. `1.5.3`)
         ```
         tfenv use 1.5.3
         ```
@@ -38,14 +38,14 @@ This guide can serve as a reference to troubleshoot and address any issues encou
      - Go to the env0 platform 
         - Project environment -> kebab menu -> Run a task:
             ```
-            terraform force-unlock
+            terraform force-unlock -force <LOCK_ID>
             ```
      - If unsuccessful, navigate to the workspace directory and run:        
         ```
         terraform force-unlock -force <LOCK_ID>
         ```
      - If there's a "Failed to load state" add `-ignore-remote-version` parameter.
-     - If the issue persists, use `tfenv` with the version `1.5.3`
+     - If the issue persists, use `tfenv` with any version below `1.6.0` 
         - Run: 
             ```
             terraform force-unlock -force LOCK_ID
