@@ -44,7 +44,6 @@ This guide can serve as a reference to troubleshoot and address any issues encou
         ```
         terraform force-unlock -force <LOCK_ID>
         ```
-     - If there's a "Failed to load state" add `-ignore-remote-version` parameter.
      - If the issue persists, use `tfenv` with any version below `1.6.0` 
         - Run: 
             ```
