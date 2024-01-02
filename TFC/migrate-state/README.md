@@ -31,3 +31,4 @@ For each workspace, the script will run the `migrate_single_workspace.sh` script
 - only workspaces with Terraform version <1.6.0 are supported. the remote version of the workspace and environment is irrelevant, we use `ignore_remote_version` when pushing the state
 - only Terraform <1.6.0 will manage to run the script
 - the script overrides existing workspaces in env0!
+- If you run into any problems, check out this [Troubleshooting Guide](./troubleshooting-guide.md) for solutions. 
