@@ -23,7 +23,7 @@ resource "env0_environment" "${workspace.name}" {
 
     configuration {
         name = "${env_var.name}"
-        value = "${replace(replace(env_var.value, "\"", "\\\""), "\n", "\\n")}"
+        value = "${format("%q", env_var.value)}"
         is_sensitive = ${env_var.sensitive}
         %{ if env_var.hcl ~}
         schema_format = "HCL"
