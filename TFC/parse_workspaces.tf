@@ -36,7 +36,7 @@ locals {
     for workspace in local.all_workspaces : workspace if workspace.vcs.repository != ""
   ]
 
-  opentofu_type_and_version = { type = "opentofu", version = "1.6.0-beta" }
+  opentofu_type_and_version = { type = "opentofu", version = "latest" }
   split_versions            = {
     for workspace in local.workspaces_with_vcs_repositories : workspace.name =>
     split(".", workspace.terraform_version)
@@ -55,7 +55,7 @@ locals {
     merge(workspace, {
       type              = local.environment_type[workspace.name].type
       terraform_version = local.environment_type[workspace.name].type == "terraform" ? workspace.terraform_version : null
-      opentofu_version  = local.environment_type[workspace.name].type == "opentofu" ?"1.6.0-beta" : null
+      opentofu_version  = local.environment_type[workspace.name].type == "opentofu" ? "latest" : null
     })
   ]
 }
