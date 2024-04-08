@@ -33,6 +33,8 @@ terraform apply -var-file=../TFC/out/data.json
 # create the env0 resources
 cd out
 terraform init
+
+# set the env0 credentials as environment variables or under the provider block in the `main.tf` file as explained here - https://registry.terraform.io/providers/env0/env0/latest/docs
 terraform apply
 ```
 
