@@ -1,4 +1,5 @@
 locals {
+  oauth_ids       = [for _, id in data.tfe_workspace_ids.all.ids : id]
   workspaces_ids  = [for _, id in data.tfe_workspace_ids.all.ids : id]
   workspace_names = [for name, _ in data.tfe_workspace_ids.all.ids : name]
   all_workspaces  = [
@@ -28,6 +29,8 @@ locals {
 
         # The "identifier" argument contains the account/organization and the repository names, separated by a slash
         repository = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[1] : ""
+
+        repository_ado = data.tfe_workspace.all[name].vcs_repo[0].identifier
       }
     }
   ]
