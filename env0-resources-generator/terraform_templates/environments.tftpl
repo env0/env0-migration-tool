@@ -8,7 +8,9 @@ resource "env0_environment" "${workspace.name}" {
     is_remote_backend = true
     %{ endif ~}
     without_template_settings {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        is_azure_devops = true
+        token_id = "${ado_token_id}"
+        repository = "https://dev.azure.com/${workspace.vcs.repository_ado}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
         type = "${workspace.type}"
