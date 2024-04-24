@@ -25,12 +25,13 @@ locals {
         # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
         branch = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].vcs_repo[0].branch != "" ? data.tfe_workspace.all[name].vcs_repo[0].branch : "" : ""
 
-        project_root = data.tfe_workspace.all[name].working_directory
+        project_root = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].working_directory : join("/", split("-", data.tfe_workspace.all[name].name))
 
         # The "identifier" argument contains the account/organization and the repository names, separated by a slash
-        repository = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[1] : ""
+        repository = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[1] : "cli"
 
-        repository_ado = data.tfe_workspace.all[name].vcs_repo[0].identifier
+
+        repository_ado = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].vcs_repo[0].identifier : var.ado_repo_base
       }
     }
   ]
