@@ -25,3 +25,9 @@ variable "tfc_token" {
   description = "TFC/TFE token"
   type        = string
 }
+
+variable "ado_repo_base" {
+  description = "default repo if cli"
+  type        = string
+  default = ""
+}
