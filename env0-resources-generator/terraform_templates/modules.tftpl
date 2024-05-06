@@ -1,0 +1,11 @@
+%{ for module in modules ~}
+resource "env0_module" "${replace(module.module_name," ","_")}" {
+    module_name            = "${module.module_name}"
+    repository             = "${module.repository}"
+    module_provider        = "${module.module_provider}"
+    bitbucket_client_key   = local.bitbucket_client_key
+    github_installation_id = local.github_installation_id 
+    token_id               = local.token_id 
+}
+
+%{ endfor ~}

@@ -5,6 +5,13 @@ data "http" "projects" {
   }
 }
 
+data "http" "modules" {
+  url             = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/registry-modules?page[size]=100"
+  request_headers = {
+    Authorization = "Bearer ${var.tfc_token}"
+  }
+}
+
 data "tfe_workspace_ids" "all" {
   exclude_tags = var.tfc_workspace_exclude_tags
   names        = var.tfc_workspace_names
@@ -24,3 +31,4 @@ data "tfe_variables" "all" {
 
   workspace_id = each.key
 }
+

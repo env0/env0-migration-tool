@@ -7,18 +7,31 @@ resource "env0_environment" "${workspace.name}" {
     %{ if workspace.type == "terraform" ~}
     is_remote_backend = true
     %{ endif ~}
-    without_template_settings {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
-        path = "${workspace.vcs.project_root}"
-        revision = "${workspace.vcs.branch}"
-        type = "${workspace.type}"
-        %{ if workspace.type == "terraform" ~}
-        terraform_version = "${workspace.terraform_version}"
-        %{ endif ~}
-        %{ if workspace.type == "opentofu" ~}
-        opentofu_version = "${workspace.opentofu_version}"
-        %{ endif ~}
+    %{ if include_vcs_connection ~}
+    dynamic "without_template_settings" {
+    for_each = [1]
+    content {
+        repository             = "https://github.com/tomer-landesman/templates"
+        path                   = "misc/null-resource"
+        revision               = ""
+        type                   = "opentofu"
+        opentofu_version       = "latest"
+        bitbucket_client_key   = local.bitbucket_client_key
+        github_installation_id = local.github_installation_id
+        token_id               = local.token_id
     }
+    }
+    %{ endif ~}
+    %{ if !include_vcs_connection }
+    without_template_settings {
+        repository             = "https://github.com/tomer-landesman/templates"
+        path                   = "misc/null-resource"
+        revision               = ""
+        type                   = "opentofu"
+        opentofu_version       = "latest"
+
+    } 
+    %{ endif ~}
     %{ for env_var in workspace.env_vars ~}
 
     configuration {
