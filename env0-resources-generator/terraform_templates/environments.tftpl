@@ -8,30 +8,42 @@ resource "env0_environment" "${workspace.name}" {
     is_remote_backend = true
     %{ endif ~}
     %{ if include_vcs_connection ~}
+    # dynamic block is the only way to omit null values. 
+    # it is required here because out provider asserts that only one of the vcs token attributes is present
     dynamic "without_template_settings" {
     for_each = [1]
     content {
-        repository             = "https://github.com/tomer-landesman/templates"
-        path                   = "misc/null-resource"
-        revision               = ""
-        type                   = "opentofu"
-        opentofu_version       = "latest"
+        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        path = "${workspace.vcs.project_root}"
+        revision = "${workspace.vcs.branch}"
+        type = "${workspace.type}"
+        %{ if workspace.type == "terraform" ~}
+        terraform_version = "${workspace.terraform_version}"
+        %{ endif ~}
+        %{ if workspace.type == "opentofu" ~}
+        opentofu_version = "${workspace.opentofu_version}"
+        %{ endif ~}
         bitbucket_client_key   = local.bitbucket_client_key
         github_installation_id = local.github_installation_id
         token_id               = local.token_id
-    }
+        }
     }
     %{ endif ~}
     %{ if !include_vcs_connection }
     without_template_settings {
-        repository             = "https://github.com/tomer-landesman/templates"
-        path                   = "misc/null-resource"
-        revision               = ""
-        type                   = "opentofu"
-        opentofu_version       = "latest"
-
-    } 
+        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        path = "${workspace.vcs.project_root}"
+        revision = "${workspace.vcs.branch}"
+        type = "${workspace.type}"
+        %{ if workspace.type == "terraform" ~}
+        terraform_version = "${workspace.terraform_version}"
+        %{ endif ~}
+        %{ if workspace.type == "opentofu" ~}
+        opentofu_version = "${workspace.opentofu_version}"
+        %{ endif ~}
+    }
     %{ endif ~}
+
     %{ for env_var in workspace.env_vars ~}
 
     configuration {
