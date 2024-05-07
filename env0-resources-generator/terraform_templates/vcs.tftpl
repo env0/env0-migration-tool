@@ -1,0 +1,11 @@
+%{ if modules_num > 0 || include_vcs_connection ~}
+data "env0_template" "vcs_connected_template" {
+  name = "Name Of VCS Connected Template"
+}
+
+locals {
+   bitbucket_client_key   = data.env0_template.vcs_connected_template.bitbucket_client_key
+   github_installation_id = data.env0_template.vcs_connected_template.github_installation_id 
+   token_id               = data.env0_template.vcs_connected_template.token_id 
+}
+%{ endif ~}

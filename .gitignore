@@ -36,3 +36,6 @@ terraform.rc
 
 # "out" directories
 **/out/*
+
+# lock files
+**/.terraform.lock.hcl
