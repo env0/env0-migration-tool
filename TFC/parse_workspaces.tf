@@ -29,6 +29,9 @@ locals {
         # The "identifier" argument contains the account/organization and the repository names, separated by a slash
         repository = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[1] : ""
       }
+      sets_names             = [
+        for variable_set in local.all_variable_sets : variable_set.name if contains(variable_set.workspace_ids, id)
+      ]
     }
   ]
 

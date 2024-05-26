@@ -23,6 +23,10 @@ locals {
         }
       ]
 
+      workspace_ids =data.tfe_variable_set.all[name].workspace_ids
+      project_names = [
+        for i, project_id in data.tfe_variable_set.all[name].project_ids : local.project_ids_to_names[project_id]
+      ]
     }
   ]
 }

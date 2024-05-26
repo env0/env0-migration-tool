@@ -15,7 +15,7 @@ data "http" "variable_sets" {
 data "tfe_variable_set" "all" {
   for_each = toset(local.variable_sets_ids)
 
-  name         = local.project_ids_to_names[each.key]
+  name         = local.variable_set_ids_to_names[each.key]
   organization = var.tfc_organization
 }
 
