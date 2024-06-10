@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49814cb0-b511-4f88-96d1-4102d2db341a" name="Changes" comment="Feat: migrate variables sets">
-      <change afterPath="$PROJECT_DIR$/env0-resources-generator/terraform_templates/variabel_sets.tftpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TFC/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/TFC/main.tf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TFC/parse_variable_sets.tf" beforeDir="false" afterPath="$PROJECT_DIR$/TFC/parse_variable_sets.tf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TFC/parse_workspaces.tf" beforeDir="false" afterPath="$PROJECT_DIR$/TFC/parse_workspaces.tf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TFC/tfc_data.tf" beforeDir="false" afterPath="$PROJECT_DIR$/TFC/tfc_data.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TFC/providers.tf" beforeDir="false" afterPath="$PROJECT_DIR$/TFC/providers.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env0-resources-generator/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/env0-resources-generator/main.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env0-resources-generator/terraform_templates/main.tftpl" beforeDir="false" afterPath="$PROJECT_DIR$/env0-resources-generator/terraform_templates/main.tftpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env0-resources-generator/terraform_templates/variabel_sets.tftpl" beforeDir="false" afterPath="$PROJECT_DIR$/env0-resources-generator/terraform_templates/variable_sets.tftpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env0-resources-generator/variables.tf" beforeDir="false" afterPath="$PROJECT_DIR$/env0-resources-generator/variables.tf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +21,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;GiliFaroEnv0&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/env0/env0-migration-tool.git&quot;,
+    &quot;accountId&quot;: &quot;870441c7-786b-4d4f-b4cb-2cb281cb28ed&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -32,25 +45,33 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feat-migrate-variable-sets",
-    "last_opened_file_path": "/Users/gilifaro/WebstormProjects/env0-migration-tool/env0-resources-generator/terraform_templates",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-migrate-variable-sets&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gilifaro/WebstormProjects/env0-migration-tool/env0-resources-generator/terraform_templates&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/env0-resources-generator/terraform_templates" />
       <recent name="$PROJECT_DIR$/TFC" />
     </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -64,6 +85,7 @@
       <workItem from="1714454631949" duration="592000" />
       <workItem from="1714470372236" duration="1506000" />
       <workItem from="1716714401752" duration="4767000" />
+      <workItem from="1716977489163" duration="2251000" />
     </task>
     <servers />
   </component>

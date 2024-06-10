@@ -43,3 +43,12 @@ resource "local_file" "modules" {
   }
 }
 
+
+resource "local_file" "variable_sets" {
+  content  = templatefile("terraform_templates/variable_sets.tftpl", { variable_sets = var.variable_sets })
+  filename = "${path.module}/out/variable_sets.tf"
+
+  provisioner "local-exec" {
+    command = "terraform fmt ${self.filename}"
+  }
+}

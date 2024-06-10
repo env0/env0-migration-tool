@@ -1,11 +1,11 @@
 %{ for variable_set in variable_sets ~}
 resource "env0_variable_set" "${variable_set.name}" {
     name = "${variable_set.name}"
-    description = variable_set.description
-    workspace = "${workspace.name}"
+    description = "${variable_set.description}"
+
     %{ for env_var in variable_set.env_vars ~}
 
-    configuration {
+    variable {
         name = "${env_var.name}"
         value = ${format("%q", env_var.value)}
         is_sensitive = ${env_var.sensitive}
@@ -15,13 +15,6 @@ resource "env0_variable_set" "${variable_set.name}" {
         type = "${env_var.type}"
     }
     %{ endfor ~}
-}
-
-%{ for project_name in variable_sets.project_names ~}
-
-resource "env0_variable_set_assignment" "${project_name}_${variable_set.name}" {
-    set_id = resource.env0_variable_set.${variable_set.name}.id
-    project_id = resource.env0_project.${replace(workspace.project_name," ","_")}.id
 }
 
 %{ endfor ~}

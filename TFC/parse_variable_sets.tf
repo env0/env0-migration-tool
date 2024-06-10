@@ -11,10 +11,10 @@ locals {
   all_variable_sets = [
     for name, id in data.tfe_variable_set.all : {
 
-      name = name
+      name = data.tfe_variable_set.all[name].name
       description = data.tfe_variable_set.all[name].description
       env_vars = [
-        for i, env_var in data.tfe_variables.all_sets_variables[id].variables : {
+        for i, env_var in data.tfe_variables.all_sets_variables[name].variables : {
           hcl       = env_var.hcl
           name      = env_var.name
           sensitive = env_var.sensitive
@@ -24,9 +24,9 @@ locals {
       ]
 
       workspace_ids =data.tfe_variable_set.all[name].workspace_ids
-      project_names = [
-        for i, project_id in data.tfe_variable_set.all[name].project_ids : local.project_ids_to_names[project_id]
-      ]
+      project_names = compact([
+        for i, project_id in data.tfe_variable_set.all[name].project_ids : contains(keys(local.project_ids_to_names), project_id) ? local.project_ids_to_names[project_id] : null
+      ])
     }
   ]
 }
