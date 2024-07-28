@@ -1,7 +1,9 @@
 %{ for variable_set in variable_sets ~}
 resource "env0_variable_set" "${variable_set.name}" {
     name = "${variable_set.name}"
-    description = "${variable_set.description}"
+    description = <<EOF
+${variable_set.description}
+EOF
 
     %{ for env_var in variable_set.env_vars ~}
 
