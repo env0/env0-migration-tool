@@ -12,13 +12,6 @@ data "http" "variable_sets" {
   }
 }
 
-data "http" "workspaces" { 
-  url             = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/workspaces"
-  request_headers = {
-    Authorization = "Bearer ${var.tfc_token}"
-  }
-}
-
 data "tfe_variable_set" "all" {
   for_each = toset(local.variable_sets_ids)
 
@@ -57,8 +50,4 @@ data "tfe_variables" "all" {
   for_each = toset(local.workspaces_ids)
 
   workspace_id = each.key
-}
-
-output "debug_workspace_list" {
-  value = jsondecode(data.http.workspaces.response_body)["data"]
 }
