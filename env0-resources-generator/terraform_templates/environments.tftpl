@@ -4,16 +4,21 @@ resource "env0_environment" "${workspace.name}" {
     project_id = resource.env0_project.${replace(workspace.project_name," ","_")}.id
     workspace = "${workspace.name}"
     approve_plan_automatically = false
+    
     %{ if workspace.type == "terraform" ~}
     is_remote_backend = true
     %{ endif ~}
-    %{ if include_vcs_connection ~}
+    %{ if workspace.vcs == null  ~}
+    prevent_auto_deploy = true
+    without_template_settings {}
+    %{ endif ~}
+    %{ if include_vcs_connection && workspace.vcs != null  ~}
     # dynamic block is the only way to omit null values. 
     # it is required here because out provider asserts that only one of the vcs token attributes is present
     dynamic "without_template_settings" {
     for_each = [1]
     content {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        repository = "${workspace.vcs.repository}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
         type = "${workspace.type}"
@@ -29,9 +34,9 @@ resource "env0_environment" "${workspace.name}" {
         }
     }
     %{ endif ~}
-    %{ if !include_vcs_connection }
+    %{ if !include_vcs_connection && workspace.vcs != null ~} 
     without_template_settings {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        repository = "${workspace.vcs.repository}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
         type = "${workspace.type}"
