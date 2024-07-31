@@ -12,7 +12,7 @@ resource "env0_environment" "${workspace.name}" {
     is_remote_apply_enabled = true
     prevent_auto_deploy = true
     without_template_settings {
-        repository = "https://repo-placeholder.com"
+        repository = "http://."
         type = "${workspace.type}"
         %{ if workspace.type == "terraform" ~}
         terraform_version = "${workspace.terraform_version}"
