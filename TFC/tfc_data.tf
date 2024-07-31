@@ -58,7 +58,3 @@ data "tfe_variables" "all" {
 
   workspace_id = each.key
 }
-
-output "debug_workspace_list" {
-  value = jsondecode(data.http.workspaces.response_body)["data"]
-}
