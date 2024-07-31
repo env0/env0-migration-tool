@@ -19,11 +19,8 @@ locals {
   workspaces_query = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/workspaces?page[size]=100${local.exclude_tags_query}${local.include_tags_query}"
 }
 
-data "http" "workspaces" { 
-  url             = local.workspaces_query
-  request_headers = {
-    Authorization = "Bearer ${var.tfc_token}"
-  }
+data "external" "workspaces" {
+  program = ["node", "${path.module}/fetch_workspaces.js", local.workspaces_query, var.tfc_token]
 }
 
 data "tfe_variable_set" "all" {

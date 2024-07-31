@@ -1,5 +1,5 @@
 locals {
-  workspaces_from_response = jsondecode(data.http.workspaces.response_body)["data"]
+  workspaces_from_response = jsondecode(data.external.workspaces.result.workspaces)
   filtered_workspaces_by_name = [
     for workspace in local.workspaces_from_response : workspace if contains(var.tfc_workspace_names, workspace["attributes"]["name"])
   ]
