@@ -11,6 +11,7 @@ locals {
   workspace_names = [for name, _ in data.tfe_workspace_ids.all.ids : name]
   all_workspaces  = [
     for workspace in local.filtered_workspaces_by_name : {
+      id        = workspace["id"]
       env_vars = [
         for i, env_var in data.tfe_variables.all[workspace["id"]].variables : {
           hcl       = env_var.hcl
@@ -27,15 +28,16 @@ locals {
       project_name      = local.project_ids_to_names[workspace["relationships"]["project"]["data"]["id"]]
       vcs               = lookup(workspace["attributes"], "vcs-repo", null) != null ? {
 
-        account =  workspace["attributes"]["vcs-repo"]["identifier"]
+        is_gitlab         = can(regex("gitlab", workspace["attributes"]["vcs-repo"]["repository-http-url"] ))
+        account           =  workspace["attributes"]["vcs-repo"]["identifier"]
 
-        # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
-        branch = workspace["attributes"]["vcs-repo"]["branch"]
+          # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
+          branch          = workspace["attributes"]["vcs-repo"]["branch"]
 
-        project_root = workspace["attributes"]["working-directory"]
+          project_root    = workspace["attributes"]["working-directory"]
 
-        # The "identifier" argument contains the account/organization and the repository names, separated by a slash
-        repository = workspace["attributes"]["vcs-repo"]["repository-http-url"] 
+          # The "identifier" argument contains the account/organization and the repository names, separated by a slash
+          repository      = workspace["attributes"]["vcs-repo"]["repository-http-url"] 
       } : null
       sets_names             = [
         for variable_set in local.all_variable_sets : variable_set.name if contains(variable_set.workspace_ids, workspace["id"])
@@ -64,16 +66,4 @@ locals {
       opentofu_version  = local.environment_type[workspace.name].type == "opentofu" ? "latest" : null
     })
   ]
-}
-
-output "ids" {
-  value = local.ids_from_response
-}
-
-output "names" {
-  value = local.names_from_response
-}
-
-output "workspaces" { 
-  value = local.all_workspaces
 }
