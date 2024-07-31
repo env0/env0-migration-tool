@@ -55,7 +55,9 @@ locals {
   environment_type = {
     for workspace in local.all_workspaces :
     workspace.name =>
-    local.opentofu_type_and_version
+    local.split_versions[workspace.name][0] == "latest" ? local.opentofu_type_and_version : parseint(local.split_versions[workspace.name][0], 10) > 1 ? local.opentofu_type_and_version :
+    parseint(local.split_versions[workspace.name][0], 10) == 1 && parseint(local.split_versions[workspace.name][1], 10) >= 6 ? local.opentofu_type_and_version :
+    { type = "terraform" }
   }
 
   final_workspace_list = [
