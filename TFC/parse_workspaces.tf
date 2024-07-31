@@ -4,11 +4,6 @@ locals {
     for workspace in local.workspaces_from_response : workspace if contains(var.tfc_workspace_names, workspace["attributes"]["name"])
   ]
 
-  ids_from_response = [for workspace in local.filtered_workspaces_by_name : workspace["id"]]
-  names_from_response = [for workspace in local.filtered_workspaces_by_name : workspace["attributes"]["name"]]
-  
-  workspaces_ids  = [for _, id in data.tfe_workspace_ids.all.ids : id]
-  workspace_names = [for name, _ in data.tfe_workspace_ids.all.ids : name]
   all_workspaces  = [
     for workspace in local.filtered_workspaces_by_name : {
       id        = workspace["id"]
