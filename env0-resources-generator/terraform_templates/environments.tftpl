@@ -3,17 +3,32 @@ resource "env0_environment" "${workspace.name}" {
     name = "${workspace.name}"
     project_id = resource.env0_project.${replace(workspace.project_name," ","_")}.id
     workspace = "${workspace.name}"
-    approve_plan_automatically = false
-    %{ if workspace.type == "terraform" ~}
-    is_remote_backend = true
+    %{ if workspace.vcs != null  ~}
+        approve_plan_automatically = false
     %{ endif ~}
-    %{ if include_vcs_connection ~}
+    %{ if workspace.vcs == null  ~}
+    approve_plan_automatically = true
+    is_remote_backend = true
+    is_remote_apply_enabled = true
+    prevent_auto_deploy = true
+    without_template_settings {
+        repository = "http://."
+        type = "${workspace.type}"
+        %{ if workspace.type == "terraform" ~}
+        terraform_version = "${workspace.terraform_version}"
+        %{ endif ~}
+        %{ if workspace.type == "opentofu" ~}
+        opentofu_version = "${workspace.opentofu_version}"
+        %{ endif ~} 
+    }
+    %{ endif ~}
+    %{ if include_vcs_connection && workspace.vcs != null  ~}
     # dynamic block is the only way to omit null values. 
     # it is required here because out provider asserts that only one of the vcs token attributes is present
     dynamic "without_template_settings" {
     for_each = [1]
     content {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        repository = "${workspace.vcs.repository}${workspace.vcs.is_gitlab ? ".git" : ""}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
         type = "${workspace.type}"
@@ -23,15 +38,18 @@ resource "env0_environment" "${workspace.name}" {
         %{ if workspace.type == "opentofu" ~}
         opentofu_version = "${workspace.opentofu_version}"
         %{ endif ~}
+        %{ if workspace.vcs.is_gitlab ~}
+        gitlab_project_id = local.workspace_to_project_id["${workspace.name}"]
+        %{ endif ~} 
         bitbucket_client_key   = local.bitbucket_client_key
         github_installation_id = local.github_installation_id
         token_id               = local.token_id
         }
     }
     %{ endif ~}
-    %{ if !include_vcs_connection }
+    %{ if !include_vcs_connection && workspace.vcs != null ~} 
     without_template_settings {
-        repository = "https://github.com/${workspace.vcs.account}/${workspace.vcs.repository}"
+        repository = "${workspace.vcs.repository}${workspace.vcs.is_gitlab ? ".git" : ""}"
         path = "${workspace.vcs.project_root}"
         revision = "${workspace.vcs.branch}"
         type = "${workspace.type}"

@@ -1,0 +1,20 @@
+provider "gitlab" {
+    token = var.gitlab_token
+}
+
+locals {
+    workspace_name_project_names = {
+        %{ for workspace in workspaces ~} 
+        ${workspace.name}: "${workspace.vcs.account}"
+        %{ endfor ~}
+    }
+}
+
+data "gitlab_project" "gitlab_projects" {
+  for_each = local.workspace_name_project_names
+  path_with_namespace = each.value
+}
+
+locals {
+  workspace_to_project_id = { for ws_name, project in data.gitlab_project.gitlab_projects : ws_name => project.id }
+}
