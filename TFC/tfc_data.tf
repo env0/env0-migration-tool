@@ -13,7 +13,7 @@ data "http" "variable_sets" {
 }
 
 data "http" "workspaces" { 
-  url             = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/workspaces?page[size]=100"
+  url             = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/workspaces?page[size]=100&search[exclude-tags]=${join(",", var.tfc_workspace_exclude_tags)}&search[tags]=${join(",", var.tfc_workspace_include_tags)}"
   request_headers = {
     Authorization = "Bearer ${var.tfc_token}"
   }
