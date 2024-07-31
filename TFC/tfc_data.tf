@@ -39,20 +39,6 @@ data "http" "modules" {
   }
 }
 
-data "tfe_workspace_ids" "all" {
-  exclude_tags = var.tfc_workspace_exclude_tags
-  names        = var.tfc_workspace_names
-  organization = var.tfc_organization
-  tag_names    = var.tfc_workspace_include_tags
-}
-
-data "tfe_workspace" "all" {
-  for_each = toset(local.workspace_names)
-
-  name         = each.key
-  organization = var.tfc_organization
-}
-
 data "tfe_variables" "all" {
   for_each = toset(local.workspaces_ids)
 
