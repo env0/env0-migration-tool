@@ -1,10 +1,16 @@
 locals {
-  workspaces_ids  = [for _, id in data.tfe_workspace_ids.all.ids : id]
-  workspace_names = [for name, _ in data.tfe_workspace_ids.all.ids : name]
+  workspaces_from_response = jsondecode(data.external.workspaces.result.workspaces)
+  filtered_workspaces_by_name = [
+    for workspace in local.workspaces_from_response : workspace if contains(var.tfc_workspace_names, workspace["attributes"]["name"])
+  ]
+
+  workspaces_ids = [ for workspace in local.filtered_workspaces_by_name : workspace["id"] ]
+
   all_workspaces  = [
-    for name, id in data.tfe_workspace_ids.all.ids : {
+    for workspace in local.filtered_workspaces_by_name : {
+      id        = workspace["id"]
       env_vars = [
-        for i, env_var in data.tfe_variables.all[id].variables : {
+        for i, env_var in data.tfe_variables.all[workspace["id"]].variables : {
           hcl       = env_var.hcl
           name      = env_var.name
           sensitive = env_var.sensitive
@@ -12,49 +18,47 @@ locals {
           type      = env_var.category == "terraform" ? "terraform" : "environment"
         }
       ]
-      labels            = data.tfe_workspace.all[name].tag_names
-      name              = data.tfe_workspace.all[name].name
-      description       = data.tfe_workspace.all[name].description
-      terraform_version = trimprefix(data.tfe_workspace.all[name].terraform_version, "~>")
-      project_name      = local.project_ids_to_names[data.tfe_workspace.all[name].project_id]
-      vcs               = {
-        # The "identifier" argument contains the account/organization and the repository names, separated by a slash
-        account = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[0] : ""
+      labels            = workspace["attributes"]["tag-names"]
+      name              = workspace["attributes"]["name"]
+      description       = workspace["attributes"]["description"]
+      terraform_version = trimprefix(workspace["attributes"]["terraform-version"], "~>")
+      project_name      = local.project_ids_to_names[workspace["relationships"]["project"]["data"]["id"]]
+      vcs               = lookup(workspace["attributes"], "vcs-repo", null) != null ? {
 
-        # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
-        branch = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? data.tfe_workspace.all[name].vcs_repo[0].branch != "" ? data.tfe_workspace.all[name].vcs_repo[0].branch : "" : ""
+        is_gitlab         = can(regex("gitlab", workspace["attributes"]["vcs-repo"]["repository-http-url"] ))
+        account           =  workspace["attributes"]["vcs-repo"]["identifier"]
 
-        project_root = data.tfe_workspace.all[name].working_directory
+          # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
+          branch          = workspace["attributes"]["vcs-repo"]["branch"]
 
-        # The "identifier" argument contains the account/organization and the repository names, separated by a slash
-        repository = length(data.tfe_workspace.all[name].vcs_repo) > 0 ? split("/", data.tfe_workspace.all[name].vcs_repo[0].identifier)[1] : ""
-      }
+          project_root    = workspace["attributes"]["working-directory"]
+
+          # The "identifier" argument contains the account/organization and the repository names, separated by a slash
+          repository      = workspace["attributes"]["vcs-repo"]["repository-http-url"] 
+      } : null
       sets_names             = [
-        for variable_set in local.all_variable_sets : variable_set.name if contains(variable_set.workspace_ids, id)
+        for variable_set in local.all_variable_sets : variable_set.name if contains(variable_set.workspace_ids, workspace["id"])
       ]
     }
   ]
 
-  workspaces_with_vcs_repositories = [
-    for workspace in local.all_workspaces : workspace if workspace.vcs.repository != ""
-  ]
 
   opentofu_type_and_version = { type = "opentofu", version = "latest" }
   split_versions            = {
-    for workspace in local.workspaces_with_vcs_repositories : workspace.name =>
+    for workspace in local.all_workspaces : workspace.name =>
     split(".", workspace.terraform_version)
   }
 
   environment_type = {
-    for workspace in local.workspaces_with_vcs_repositories :
+    for workspace in local.all_workspaces :
     workspace.name =>
-    parseint(local.split_versions[workspace.name][0], 10) > 1 ? local.opentofu_type_and_version :
+    local.split_versions[workspace.name][0] == "latest" ? local.opentofu_type_and_version : parseint(local.split_versions[workspace.name][0], 10) > 1 ? local.opentofu_type_and_version :
     parseint(local.split_versions[workspace.name][0], 10) == 1 && parseint(local.split_versions[workspace.name][1], 10) >= 6 ? local.opentofu_type_and_version :
     { type = "terraform" }
   }
 
   final_workspace_list = [
-    for workspace in local.workspaces_with_vcs_repositories :
+    for workspace in local.all_workspaces :
     merge(workspace, {
       type              = local.environment_type[workspace.name].type
       terraform_version = local.environment_type[workspace.name].type == "terraform" ? workspace.terraform_version : null

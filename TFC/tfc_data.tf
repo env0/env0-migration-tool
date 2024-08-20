@@ -12,6 +12,17 @@ data "http" "variable_sets" {
   }
 }
 
+locals {
+  exclude_tags_query = var.tfc_workspace_exclude_tags != null  ? "&search[exclude-tags]=${join(",", var.tfc_workspace_exclude_tags)}" : ""
+  include_tags_query = var.tfc_workspace_include_tags != null ? "&search[tags]=${join(",", var.tfc_workspace_include_tags)}" : ""
+
+  workspaces_query = "https://app.terraform.io/api/v2/organizations/${var.tfc_organization}/workspaces?page[size]=100${local.exclude_tags_query}${local.include_tags_query}"
+}
+
+data "external" "workspaces" {
+  program = ["node", "${path.module}/fetch_workspaces.js", local.workspaces_query, var.tfc_token]
+}
+
 data "tfe_variable_set" "all" {
   for_each = toset(local.variable_sets_ids)
 
@@ -30,20 +41,6 @@ data "http" "modules" {
   request_headers = {
     Authorization = "Bearer ${var.tfc_token}"
   }
-}
-
-data "tfe_workspace_ids" "all" {
-  exclude_tags = var.tfc_workspace_exclude_tags
-  names        = var.tfc_workspace_names
-  organization = var.tfc_organization
-  tag_names    = var.tfc_workspace_include_tags
-}
-
-data "tfe_workspace" "all" {
-  for_each = toset(local.workspace_names)
-
-  name         = each.key
-  organization = var.tfc_organization
 }
 
 data "tfe_variables" "all" {

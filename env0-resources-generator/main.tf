@@ -1,3 +1,8 @@
+
+locals {
+  gitlab_workspaces = [for workspace in var.workspaces : workspace if try(workspace.vcs.is_gitlab, false)]
+  is_gitlab = length(local.gitlab_workspaces) > 0
+}
 resource "local_file" "main" {
   content  = templatefile("terraform_templates/main.tftpl", { })
   filename = "${path.module}/out/main.tf"
@@ -42,6 +47,16 @@ resource "local_file" "modules" {
     command = "terraform fmt ${self.filename}"
   }
 }
+resource "local_file" "gitlab" {
+  content  = templatefile("terraform_templates/gitlab.tftpl", { workspaces = local.gitlab_workspaces })
+  filename = "${path.module}/out/gitlab.tf"
+
+  provisioner "local-exec" {
+    command = "terraform fmt ${self.filename}"
+  }
+
+  count = local.is_gitlab ? 1 : 0
+}
 
 
 resource "local_file" "variable_sets" {
@@ -52,3 +67,13 @@ resource "local_file" "variable_sets" {
     command = "terraform fmt ${self.filename}"
   }
 }
+
+resource "local_file" "terraform_variables" {
+  content  = templatefile("terraform_templates/terraform_variables.tftpl", {is_gitlab = local.is_gitlab})
+  filename = "${path.module}/out/variables.tf"
+
+  provisioner "local-exec" {
+    command = "terraform fmt ${self.filename}"
+  }
+}
+

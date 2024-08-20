@@ -1,0 +1,13 @@
+variable "env0_api_key" {
+
+}
+
+variable "env0_api_secret" {
+    
+}
+
+%{ if is_gitlab ~}
+variable "gitlab_token" {
+  description = "The GitLab token to use for authentication."
+}
+%{ endif ~}
