@@ -38,9 +38,6 @@ resource "env0_environment" "${workspace.name}" {
         %{ if workspace.type == "opentofu" ~}
         opentofu_version = "${workspace.opentofu_version}"
         %{ endif ~}
-        %{ if workspace.vcs.is_gitlab ~}
-        gitlab_project_id = local.workspace_to_project_id["${workspace.name}"]
-        %{ endif ~} 
         bitbucket_client_key   = local.bitbucket_client_key
         github_installation_id = local.github_installation_id
         token_id               = local.token_id
