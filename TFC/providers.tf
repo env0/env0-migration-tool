@@ -22,7 +22,9 @@ terraform {
   }
 }
 
-provider "tfe" {}
+provider "tfe" {
+  token = var.tfc_token
+}
 
 provider "http" {}
 
