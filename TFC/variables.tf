@@ -9,9 +9,9 @@ variable "tfc_workspace_names" {
   type        = list(string)
 }
 
-variable "tfc_url" {
+variable "tfc_hostname" {
   default     = "app.terraform.io"
-  description = "Custom url for TFC for example for TFE."
+  description = "Custom hostname for TFC, default is - app.terraform.io."
   type        = string
 }
 

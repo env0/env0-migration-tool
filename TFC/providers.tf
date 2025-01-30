@@ -24,7 +24,7 @@ terraform {
 
 provider "tfe" {
   token = var.tfc_token
-  hostname = var.tfc_url
+  hostname = var.tfc_hostname
 }
 
 provider "http" {}
