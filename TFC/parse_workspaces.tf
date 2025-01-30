@@ -26,6 +26,7 @@ locals {
       vcs               = lookup(workspace["attributes"], "vcs-repo", null) != null ? {
 
         is_gitlab         = can(regex("gitlab", workspace["attributes"]["vcs-repo"]["repository-http-url"] ))
+        is_ghe            = can(regex("github_enterprise", workspace["attributes"]["vcs-repo"]["service-provider"] ))
         account           =  workspace["attributes"]["vcs-repo"]["identifier"]
 
           # When the branch for the stack is the repository's default branch, the value is empty so we use the value provided via the variable
