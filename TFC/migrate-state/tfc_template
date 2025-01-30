@@ -3,6 +3,7 @@ terraform {
     organization = "!!!TFC_ORG_NAME!!!"
     workspaces {
       name = "!!!WS_NAME!!!"
+      hostname = "!!!TFC_HOSTNAME!!!"
     }
   }
 }
