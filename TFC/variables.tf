@@ -9,6 +9,13 @@ variable "tfc_workspace_names" {
   type        = list(string)
 }
 
+variable "tfc_url" {
+  default     = "app.terraform.io"
+  description = "Custom url for TFC for example for TFE."
+  type        = string
+}
+
+
 variable "tfc_workspace_exclude_tags" {
   default     = null
   description = "List of TFC/TFE workspace tags to exclude when exporting. Excluded tags take precedence over included ones. Wildcards are not supported."
