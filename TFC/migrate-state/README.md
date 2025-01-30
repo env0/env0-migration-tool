@@ -13,6 +13,7 @@ This action will migrate state from one TFC workspace to an env0 environment.
 
 - `ENV0_ORG_ID`: env0 organization id
 - `TFC_ORG_NAME`: organization name in TFC
+- `TFC_HOSTNAME`: organization name in TFC, if not set will default to "app.terraform.io"
 
 ## Usage
 
