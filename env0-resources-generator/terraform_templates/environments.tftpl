@@ -41,6 +41,9 @@ resource "env0_environment" "${workspace.name}" {
         bitbucket_client_key   = local.bitbucket_client_key
         github_installation_id = local.github_installation_id
         token_id               = local.token_id
+        %{ if "${workspace.vcs.is_ghe}" == true ~}
+        is_github_enterprise = true
+        %{ endif ~}
         }
     }
     %{ endif ~}
@@ -55,6 +58,9 @@ resource "env0_environment" "${workspace.name}" {
         %{ endif ~}
         %{ if workspace.type == "opentofu" ~}
         opentofu_version = "${workspace.opentofu_version}"
+        %{ endif ~}
+        %{ if "${workspace.vcs.is_ghe}" == true ~}
+        is_github_enterprise = true
         %{ endif ~}
     }
     %{ endif ~}
