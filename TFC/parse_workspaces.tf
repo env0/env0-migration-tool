@@ -1,7 +1,11 @@
 locals {
   workspaces_from_response = jsondecode(data.external.workspaces.result.workspaces)
   filtered_workspaces_by_name = [
-    for workspace in local.workspaces_from_response : workspace if contains(var.tfc_workspace_names, workspace["attributes"]["name"])
+    for workspace in local.workspaces_from_response : workspace
+    if anytrue([
+      for pattern in var.tfc_workspace_names :
+        can(regex("^${replace(pattern, "*", ".*")}$", workspace["attributes"]["name"]))
+    ])
   ]
 
   workspaces_ids = [ for workspace in local.filtered_workspaces_by_name : workspace["id"] ]
