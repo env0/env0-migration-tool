@@ -27,9 +27,8 @@ terraform init
 terraform apply -var-file=exporter.tfvars
 ```
 
-3. create the environments in env0:
-   go to the `env0-resources-generator` folder and run:
-
+3. Create the environments in env0:
+Go to the `env0-resources-generator/` folder and run:
 ```bash
 # generate the env0 resources terraform files
 terraform init
@@ -45,22 +44,29 @@ terraform apply
 
 Note: you'll need to have the env0 credentials set as environment variables. See [here](https://docs.env0.com/reference/authentication#creating-a-personal-api-key) about env0 API keys
 
-4. import the workspaces to env0:
-   go to the `TFC/migrate-state` folder and run:
 
+4. Import the Terraform state into env0:
+Go to the `TFC/migrate-state/` folder and run one of the following:
 ```bash
+## migrate all Terraform workspaces found in TFC/out/data.json
 ./migrate_workspaces.sh
+
+## migrate a single workspace by name (use this if only one workspace is being migrated)
+./migrate_single_workspace.sh <WORKSPACE_NAME>
 ```
 
-Note: you'll need to have the env0 credentials set as environment variables and to be logged into Terraform CLI in order to run the above command. In addition, the following environment variables are required:
-
+Notes:
+- You must be logged into Terraform CLI (`terraform login`) and have env0 credentials exported to the environment.
+- Required environment variables for migration scripts:
 - `ENV0_ORG_ID` - env0 organization id
 - `TFC_ORG_NAME` - organization name in TFC
-- `ENV0_HOSTNAME` - (Optional) the remote backend URL of env0. `backend.api.env0.com` is used by default
+  - `ENV0_API_KEY` and `ENV0_API_SECRET` - env0 personal API key and secret
+  - `ENV0_HOSTNAME` - (Optional) env0 backend hostname. Defaults to `backend.api.env0.com`
+ - VCS: You can use a single env0 VCS connection whose token has access to all relevant repositories; separate templates per repo/branch are not required.
 
-the script is supported only for Terraform version <1.6.0
+The migration scripts are supported only for Terraform version < 1.6.0.
 
-See `migrate-state/README.md` for more details about this phase
+See `TFC/migrate-state/README.md` for more details about this phase.
 
 ## Supported workspaces for migration
 

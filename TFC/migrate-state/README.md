@@ -6,18 +6,29 @@ This action will migrate state from one TFC workspace to an env0 environment.
 
 - A TFC organization
 - An env0 organization
-- Being logged in to TFC using `terraform login`
+- Terraform CLI logged in (`terraform login`)
+- Terraform version < 1.6.0
 - Export `ENV0_API_KEY` and `ENV0_API_SECRET` as environment variables
 
 ## Inputs
 
 - `ENV0_ORG_ID`: env0 organization id
 - `TFC_ORG_NAME`: organization name in TFC
+- `ENV0_API_KEY` and `ENV0_API_SECRET`: env0 personal API key and secret
+- `ENV0_HOSTNAME` (optional): env0 backend hostname. Defaults to `backend.api.env0.com`
 - `TFC_HOSTNAME`: organization name in TFC, if not set will default to "app.terraform.io"
 
 ## Usage
 
-1. run `./migrate_workspaces.sh`
+From the `TFC/migrate-state/` directory, run one of the following:
+
+```bash
+# migrate all Terraform workspaces found in ../out/data.json
+./migrate_workspaces.sh
+
+# migrate a single workspace by name (use this if only one workspace is being migrated)
+./migrate_single_workspace.sh <WORKSPACE_NAME>
+```
 
 ## How does it work?
 
