@@ -1,5 +1,5 @@
 %{ for variable_set in variable_sets ~}
-resource "env0_variable_set" "${variable_set.name}" {
+resource "env0_variable_set" "${replace(variable_set.name," ","_")}" {
     name = "${variable_set.name}"
     description = <<EOF
 ${variable_set.description}
